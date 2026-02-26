@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>monster · god of server</title>
+  <title>Monstar · bag developer</title>
   <!-- Font Awesome 5 (free) for icons -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
   <style>
@@ -11,544 +11,529 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', 'Courier New', monospace, system-ui;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
-      background: #0b0d10;
-      color: #d0f0d0;
-      line-height: 1.6;
-      min-height: 100vh;
+      background: #f4f3f1;
       display: flex;
       flex-direction: column;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(30, 150, 70, 0.05) 0%, transparent 30%),
-        repeating-linear-gradient(0deg, rgba(0,20,0,0.2) 0px, rgba(0,40,0,0.1) 2px, transparent 3px, transparent 6px);
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem 1rem;
     }
 
-    /* terminal / hacking vibe */
-    .glitch {
-      text-shadow: 0 0 5px #0f0, 2px 2px 8px black;
-      letter-spacing: 2px;
-    }
-
-    .container {
+    /* main card – website meking promot */
+    .monstar-card {
       max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px 25px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2.5rem 2.5rem 2rem 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0,0,0,0.03);
+      overflow: hidden;
+      transition: all 0.2s ease;
     }
 
-    /* header / monster identity */
+    /* header with brand & login demo */
     .top-bar {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #1e4a2a;
-      padding-bottom: 15px;
-      margin-bottom: 30px;
-      border-image: repeating-linear-gradient(90deg, #2e8b57, #0f0, #1e4a2a) 30;
+      justify-content: space-between;
+      background: #1e1e2a;
+      padding: 1rem 2.5rem;
+      color: white;
     }
 
-    .logo h1 {
-      font-size: 2.5rem;
-      background: linear-gradient(135deg, #b0ffb0, #50ff50);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 8px #1f9);
-      font-weight: 800;
-      text-transform: uppercase;
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .logo span {
-      font-size: 1.2rem;
-      color: #7f8c8d;
-      display: block;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 4px;
+    .logo-icon {
+      font-size: 2rem;
+      background: #ffb347;
+      width: 48px;
+      height: 48px;
+      border-radius: 30% 70% 70% 30% / 30% 55% 45% 70%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1e1e2a;
     }
 
-    .badge {
-      background: #0f2a1a;
-      padding: 12px 25px;
-      border-radius: 40px;
-      border: 1px solid #2ecc71;
-      box-shadow: 0 0 15px #27ae60;
-      font-weight: bold;
-      font-size: 1.3rem;
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.9rem;
+      letter-spacing: -0.5px;
+    }
+    .logo-text span {
+      color: #ffb347;
+      font-weight: 300;
     }
 
-    .badge i {
-      color: #f1c40f;
-      margin-right: 8px;
-    }
-
-    .badge .country {
-      color: #f1c40f;
-      background: #1e3a2a;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-left: 10px;
+    /* login pill – exactly name: monstar / pass: viki26 */
+    .login-pill {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.5rem 0.6rem 1.8rem;
+      border-radius: 60px;
+      border: 1px solid rgba(255,180,70,0.3);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
       font-size: 1rem;
     }
 
-    /* main monster card */
-    .monster-panel {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 25px;
-      margin: 35px 0;
-    }
-
-    .monster-card {
-      flex: 2;
-      min-width: 280px;
-      background: #0e1a14;
-      border: 1px solid #2e8b57;
-      border-radius: 30px;
-      padding: 30px 25px;
-      box-shadow: 0 20px 30px -10px black, inset 0 0 20px rgba(0,255,0,0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .monster-card::before {
-      content: "⚡ MONSTER ⚡";
-      position: absolute;
-      top: 10px;
-      right: -25px;
-      background: #27ae60;
-      color: black;
-      padding: 5px 30px;
-      transform: rotate(35deg);
-      font-weight: 800;
-      font-size: 0.8rem;
-      letter-spacing: 3px;
-      opacity: 0.3;
-      pointer-events: none;
-    }
-
-    .server-god {
-      font-size: 2.8rem;
-      font-weight: 900;
-      line-height: 1.2;
-      text-transform: uppercase;
-      background: linear-gradient(145deg, #c0ffc0, #50ff50);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .server-god small {
-      font-size: 1.2rem;
-      display: block;
-      color: #b0d0b0;
-      letter-spacing: 6px;
-    }
-
-    .feature-list {
-      margin: 30px 0;
-      list-style: none;
-    }
-
-    .feature-list li {
-      padding: 12px 0;
-      border-bottom: 1px dashed #1e4a2a;
-      font-size: 1.2rem;
+    .login-item {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 8px;
     }
-
-    .feature-list i.fa-shield-alt { color: #2ecc71; }
-    .feature-list i.fa-skull { color: #e74c3c; }
-    .feature-list i.fa-bolt { color: #f39c12; }
-    .feature-list i.fa-dragon { color: #3498db; }
-
-    .whatsapp-zone {
-      flex: 1;
-      min-width: 240px;
-      background: #102312;
-      border-radius: 30px;
-      border: 1px solid #2ecc71;
-      padding: 25px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      box-shadow: 0 0 30px #1e4a2a;
+    .login-item i {
+      color: #ffb347;
+      width: 20px;
+      font-size: 1rem;
     }
-
-    .wa-icon {
-      font-size: 4rem;
-      color: #25D366;
-      filter: drop-shadow(0 0 15px #2ecc71);
-      margin-bottom: 15px;
+    .login-item .label {
+      color: #aaa;
+      font-weight: 400;
+      font-size: 0.9rem;
     }
-
-    .wa-number {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: #1e2a1e;
-      padding: 12px 20px;
-      border-radius: 60px;
-      border: 1px solid #2ecc71;
-      letter-spacing: 2px;
-      margin: 15px 0;
-      display: inline-block;
-    }
-
-    .wa-number small {
-      font-size: 1.1rem;
-      color: #f0f0a0;
-      display: block;
-    }
-
-    .country-tag {
-      background: #1f3a2a;
-      border-radius: 40px;
-      padding: 8px 25px;
-      font-size: 1.5rem;
-      border: 1px solid gold;
-      margin-top: 10px;
-    }
-
-    .country-tag i {
-      color: gold;
-    }
-
-    /* report / cta section */
-    .report-section {
-      background: #0a150e;
-      border-left: 8px solid #e67e22;
-      border-radius: 20px;
-      padding: 25px 30px;
-      margin: 40px 0;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 5px 0 #1e3a1e;
-    }
-
-    .report-text {
-      font-size: 1.8rem;
+    .login-item .value {
       font-weight: 600;
+      color: #fff;
+      background: #2a2a3a;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+      font-family: 'Fira Mono', monospace;
+    }
+    .value.monstar {
+      background: #2b2b3c;
+    }
+    .value.viki26 {
+      background: #2b2b3c;
     }
 
-    .report-text i {
-      color: #e67e22;
-      margin-right: 10px;
+    /* hero section — bag website (web developer) */
+    .hero-bag {
+      display: flex;
+      flex-wrap: wrap;
+      background: linear-gradient(115deg, #fefcf7 0%, #fff9f0 100%);
+      padding: 2rem 2.5rem 2rem 2.5rem;
+      align-items: center;
+      gap: 2rem;
+      border-bottom: 1px solid #ede9e2;
     }
 
-    .report-button {
-      background: #e67e22;
+    .bag-info {
+      flex: 1 1 280px;
+    }
+    .bag-info .badge {
+      background: #ffb34720;
+      color: #b45f1a;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 1rem;
+      border: 1px solid #ffb34740;
+    }
+    .bag-info h1 {
+      font-size: 2.9rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #1e1e2a;
+      margin-bottom: 1rem;
+    }
+    .bag-info h1 i {
+      color: #ffb347;
+      font-style: normal;
+      background: #1e1e2a;
+      color: #ffcb7a;
+      padding: 0 0.4rem;
+      border-radius: 12px;
+    }
+    .bag-info .developer-tag {
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #4a4a5a;
+      margin-bottom: 1.6rem;
+    }
+    .developer-tag i {
+      color: #ffb347;
+      margin-right: 0.5rem;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
       border: none;
-      color: #0b0d10;
-      padding: 16px 40px;
-      font-size: 1.6rem;
-      font-weight: 900;
-      border-radius: 60px;
+      background: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.02);
       cursor: pointer;
       transition: 0.2s;
-      box-shadow: 0 0 20px #f39c12;
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      font-size: 1rem;
+      border: 1px solid #e2dcd2;
+    }
+    .btn-primary {
+      background: #1e1e2a;
+      color: white;
+      border: 1px solid #1e1e2a;
+    }
+    .btn-primary i {
+      color: #ffb347;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #cbc3b6;
     }
 
-    .report-button:hover {
-      background: #f39c12;
-      transform: scale(1.02);
-      box-shadow: 0 0 35px #f1c40f;
+    .bag-preview {
+      flex: 1 1 260px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.15"><circle cx="100" cy="100" r="80" fill="none" stroke="%23ffb347" stroke-width="2" stroke-dasharray="6 6"/><circle cx="100" cy="100" r="50" fill="none" stroke="%23ffb347" stroke-width="2"/></svg>') center/contain no-repeat;
+      min-height: 200px;
     }
 
-    /* sri lanka +94 special */
-    .sri-lanka-footer {
+    .bag-icon-box {
+      background: #f6eee5;
+      width: 200px;
+      height: 200px;
+      border-radius: 50% 50% 40% 40% / 50% 50% 40% 40%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+      border: 6px solid white;
+    }
+    .bag-icon-box i {
+      font-size: 5rem;
+      color: #4a3f33;
+      margin-bottom: 0.5rem;
+    }
+    .bag-icon-box span {
+      font-weight: 700;
+      background: #1e1e2a;
+      color: #ffd89c;
+      padding: 0.2rem 1.2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+
+    /* collection grid / bags */
+    .bag-collection {
+      padding: 2.5rem 2.5rem 2rem;
+      background: white;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .section-title h2 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: #23232e;
+    }
+    .section-title h2 i {
+      color: #ffb347;
+      margin-right: 0.5rem;
+    }
+    .section-title .line {
+      height: 2px;
+      background: #ece7e0;
+      flex: 1;
+    }
+
+    .bag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem 1.5rem;
+    }
+
+    .bag-item {
+      background: #faf9f7;
+      border-radius: 2rem 2rem 1.5rem 1.5rem;
+      padding: 2rem 1rem 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      border: 1px solid #f0e8de;
+      box-shadow: 0 4px 8px #f0e7db50;
+    }
+
+    .bag-item:hover {
+      transform: translateY(-6px);
+      border-color: #ffd59e;
+      box-shadow: 0 16px 24px -8px #e9cfb080;
+    }
+
+    .bag-emoji {
+      font-size: 3.5rem;
+      background: white;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 10px 0 #ece1d3;
+      border: 1px solid #dad1c4;
+    }
+
+    .bag-item h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #23232e;
+    }
+
+    .bag-item .dev-sign {
+      color: #ff9020;
+      font-weight: 500;
+      font-size: 0.9rem;
+      background: #fff0de;
+      display: inline-block;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      margin: 0.8rem 0;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #1e1e2a;
+    }
+    .price small {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #7a7267;
+    }
+
+    /* footer — login reminder & credits */
+    .footer-note {
+      background: #1e1e2a;
+      color: #afafbf;
+      padding: 1.5rem 2.5rem;
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      background: #071009;
-      border-radius: 60px;
-      padding: 10px 30px;
-      margin-top: 25px;
-      border: 1px solid #3a6;
+      font-size: 0.95rem;
     }
-
-    .sri-badge {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    .footer-note .credentials-reminder i {
+      color: #ffb347;
+      margin-right: 0.5rem;
     }
-
-    .sri-badge img {
-      width: 42px;
-      height: 28px;
-      object-fit: cover;
-      border-radius: 6px;
-      box-shadow: 0 0 10px #2ecc71;
-    }
-
-    .sri-badge span {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #f5e56b;
-    }
-
-    .emoji-lion {
-      font-size: 2.4rem;
-      filter: drop-shadow(0 0 4px orange);
-    }
-
-    .sri-lanka-footer p {
-      font-size: 1.2rem;
-    }
-
-    /* live stats (js part) */
-    .stats {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      margin: 30px 0;
-    }
-
-    .stat-item {
-      background: #102312;
+    .footer-note .credentials-reminder strong {
+      background: #2b2b3c;
+      padding: 0.3rem 0.9rem;
       border-radius: 30px;
-      padding: 15px 25px;
-      border: 1px solid #2a6;
+      color: #ffc489;
+      font-family: monospace;
+      margin: 0 0.2rem;
+      font-weight: 600;
+    }
+    .footer-note .fas.fa-heart {
+      color: #ff6f6f;
+    }
+
+    /* small js demo — interactive login hint */
+    .toast-msg {
+      visibility: hidden;
+      min-width: 250px;
+      background: #23232e;
+      color: #fff4e6;
       text-align: center;
-      min-width: 150px;
+      border-radius: 50px;
+      padding: 0.8rem 1.5rem;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-weight: 500;
+      border-left: 6px solid #ffb347;
+    }
+    .toast-msg.show {
+      visibility: visible;
+      opacity: 1;
     }
 
-    .stat-value {
-      font-size: 2.3rem;
-      font-weight: 800;
-      color: #8affb8;
-    }
-
-    /* dynamic whatsapp click to report */
-    .click-report {
-      cursor: pointer;
-      transition: 0.1s;
-    }
-
-    .glow {
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.7; text-shadow: 0 0 10px #2ecc71; }
-    }
-
-    /* responsiveness */
     @media (max-width: 700px) {
-      .top-bar { flex-direction: column; text-align: center; }
-      .wa-number { font-size: 1.8rem; }
-      .report-text { font-size: 1.4rem; }
-    }
-
-    /* fake cli */
-    .cli-demo {
-      background: #0c0f0c;
-      padding: 15px;
-      border-radius: 14px;
-      font-family: 'Courier New', monospace;
-      border: 1px solid #2a6;
-      margin-top: 25px;
-    }
-
-    .cli-demo .prompt {
-      color: #8bc34a;
-    }
-
-    .blinking-cursor {
-      background-color: #2ecc71;
-      width: 10px;
-      height: 18px;
-      display: inline-block;
-      animation: blink 1s step-end infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+      .top-bar { flex-direction: column; align-items: start; gap: 1rem; }
+      .login-pill { width: 100%; justify-content: space-between; }
+      .hero-bag { padding: 1.8rem; }
     }
   </style>
 </head>
 <body>
-
-<div class="container">
-
-  <!-- header: monster + god of server -->
-  <div class="top-bar">
-    <div class="logo">
-      <h1><i class="fas fa-dragon" style="color: #2ecc71;"></i> MONSTER <i class="fas fa-bolt" style="color: gold;"></i></h1>
-      <span>GOD OF SERVER</span>
-    </div>
-    <div class="badge">
-      <i class="fas fa-phone-alt"></i> WHATSAPP REPORT <span class="country"><i class="fas fa-map-pin"></i> +94 (Sri Lanka)</span>
-    </div>
-  </div>
-
-  <!-- main monster & wa area -->
-  <div class="monster-panel">
-    <!-- left monster card -->
-    <div class="monster-card">
-      <div class="server-god">
-        💀 GOD OF SERVER
-        <small>⛧ MONSTER HIVE ⛧</small>
+  <div class="monstar-card">
+    <!-- top bar: brand + login name & password (monstar / viki26) -->
+    <div class="top-bar">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-bag-shopping"></i></div>
+        <div class="logo-text">mon<span>star</span></div>
       </div>
-      <ul class="feature-list">
-        <li><i class="fas fa-shield-alt fa-fw"></i> <span>Server渗透 · 零day 狩猎</span></li>
-        <li><i class="fas fa-skull fa-fw"></i> <span>Monster 后门 · 持久化控制</span></li>
-        <li><i class="fas fa-bolt fa-fw"></i> <span>DDoS 雷击 · 每秒TB级</span></li>
-        <li><i class="fas fa-dragon fa-fw"></i> <span>God 权限 · 虚拟化逃逸</span></li>
-      </ul>
-      <!-- fake cli (js will update later) -->
-      <div class="cli-demo" id="cli">
-        <span class="prompt">monster@server:~$</span> <span id="cli-text">scan --target sri-lanka</span><span class="blinking-cursor"></span>
+      <!-- exactly the requested login: name - monstar, password - viki26 -->
+      <div class="login-pill">
+        <div class="login-item">
+          <i class="fas fa-user"></i>
+          <span class="label">name</span>
+          <span class="value monstar">monstar</span>
+        </div>
+        <div class="login-item">
+          <i class="fas fa-lock"></i>
+          <span class="label">pass</span>
+          <span class="value viki26">viki26</span>
+        </div>
       </div>
-      <p style="margin-top: 15px; color: #8a9; font-size: 0.9rem;"><i class="fas fa-skull-crossbones"></i> 31 monsters online · 0 day exploits ready</p>
     </div>
 
-    <!-- right whatsapp card -->
-    <div class="whatsapp-zone" id="whatsapp-card">
-      <i class="fab fa-whatsapp wa-icon"></i>
-      <h2 style="color:#ccf0cc; letter-spacing:2px;">REPORT NUMBER</h2>
-      <div class="wa-number click-report" id="wa-click">
-        <i class="fas fa-phone"></i> +94 <span style="font-size:2rem;">77 777 7777</span>
-        <small>🇱🇰 sri lanka (emergency)</small>
+    <!-- hero / bag website + web developer message -->
+    <div class="hero-bag">
+      <div class="bag-info">
+        <span class="badge"><i class="fas fa-code"></i> web developer · bags since 2026</span>
+        <h1>Bags <i>&</i> code</h1>
+        <div class="developer-tag">
+          <i class="fas fa-laptop-code"></i> develop your carry
+        </div>
+        <div class="cta-buttons">
+          <button class="btn btn-primary" id="showDevIdeaBtn"><i class="fas fa-lightbulb"></i> my idea</button>
+          <button class="btn btn-outline" id="remindLoginBtn"><i class="fas fa-key"></i> login hint</button>
+        </div>
       </div>
-      <div class="country-tag">
-        <i class="fas fa-location-arrow"></i> hotline · monster +94
+      <div class="bag-preview">
+        <div class="bag-icon-box">
+          <i class="fas fa-shoe-prints"></i> <!-- just for style, but we show a bag icon -->
+          <i class="fas fa-briefcase"></i>
+          <span>monstar</span>
+        </div>
       </div>
-      <p style="margin-top: 20px; font-size: 1.1rem;"><i class="fas fa-hourglass-half"></i> reply in 2.3 sec (always online)</p>
+    </div>
+
+    <!-- bag collection – representing the "bag website" concept -->
+    <div class="bag-collection">
+      <div class="section-title">
+        <i class="fas fa-bags-shopping" style="font-size: 2rem; color: #ffb347;"></i>
+        <h2><i class="fas fa-cube"></i> developer bags</h2>
+        <div class="line"></div>
+      </div>
+      <div class="bag-grid">
+        <div class="bag-item">
+          <div class="bag-emoji">🎒</div>
+          <h3>backpack</h3>
+          <div class="dev-sign"><i class="fas fa-code"></i> web dev</div>
+          <div class="price">$79 <small>light</small></div>
+        </div>
+        <div class="bag-item">
+          <div class="bag-emoji">👝</div>
+          <h3>clutch</h3>
+          <div class="dev-sign"><i class="fas fa-js"></i> JS</div>
+          <div class="price">$49 <small>edition</small></div>
+        </div>
+        <div class="bag-item">
+          <div class="bag-emoji">💼</div>
+          <h3>briefcase</h3>
+          <div class="dev-sign"><i class="fas fa-database"></i> full‑stack</div>
+          <div class="price">$129 <small>pro</small></div>
+        </div>
+        <div class="bag-item">
+          <div class="bag-emoji">🧳</div>
+          <h3>duffel</h3>
+          <div class="dev-sign"><i class="fas fa-mobile-alt"></i> responsive</div>
+          <div class="price">$99 <small>flex</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer with reminder (login credentials again) -->
+    <div class="footer-note">
+      <div class="credentials-reminder">
+        <i class="fas fa-key"></i> login: <strong>monstar</strong> / pass <strong>viki26</strong>
+      </div>
+      <div>
+        <i class="fas fa-heart"></i> bag website promot · monstar
+      </div>
     </div>
   </div>
 
-  <!-- stats section (dynamic js) -->
-  <div class="stats">
-    <div class="stat-item">
-      <div class="stat-value" id="stat-servers">0</div>
-      <div>owned servers</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" id="stat-exploits">0</div>
-      <div>0day in stock</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value" id="stat-wa">+94</div>
-      <div>whatsapp reports</div>
-    </div>
+  <!-- hidden toast for JS interactions -->
+  <div id="liveToast" class="toast-msg">
+    <i class="fas fa-bag-shopping" style="margin-right: 0.5rem;"></i> <span id="toastText">monstar</span>
   </div>
 
-  <!-- big report / CTA -->
-  <div class="report-section">
-    <div class="report-text">
-      <i class="fas fa-exclamation-triangle"></i> MONSTER REPORT
-    </div>
-    <button class="report-button" id="reportActionBtn">
-      <i class="fab fa-whatsapp"></i> +94 WHATSAPP
-    </button>
-  </div>
+  <script>
+    (function() {
+      // JS interactive — fulfilling "loging name & paswed - name - monstar - paswed - viki26"
+      const toastEl = document.getElementById('liveToast');
+      const toastText = document.getElementById('toastText');
 
-  <!-- sri lanka +94 footer -->
-  <div class="sri-lanka-footer">
-    <div class="sri-badge">
-      <!-- flag emoji as fallback (no external image) -->
-      <span class="emoji-lion">🦁🇱🇰</span>
-      <span>+94</span>
-      <i class="fas fa-leaf" style="color: green;"></i>
-    </div>
-    <p><i class="fas fa-server"></i> god of server · monster lk · colombo dc</p>
-    <p><i class="fas fa-terminal"></i> 24/7  monster mode</p>
-  </div>
+      function showToast(message, icon = '💡') {
+        toastText.innerHTML = `${icon} ${message}`;
+        toastEl.classList.add('show');
+        setTimeout(() => {
+          toastEl.classList.remove('show');
+        }, 2500);
+      }
 
-  <!-- tiny note: name +94 in several places -->
-  <div style="text-align: right; margin-top: 15px; color: #3a5; font-size: 0.8rem;">
-    <i class="fas fa-bug"></i> sri lanka cyber monster · TEAM GOD OF SERVER
-  </div>
-</div>
+      // Buttons
+      const devBtn = document.getElementById('showDevIdeaBtn');
+      const loginBtn = document.getElementById('remindLoginBtn');
 
-<!-- javascript for interaction and dynamic content -->
-<script>
-  (function() {
-    // stats increment (fake but live-ish)
-    let servers = 1337;
-    let exploits = 49;
+      // My idea (bag website & web developer)
+      devBtn.addEventListener('click', () => {
+        showToast('👜 my idea: bags for web devs — monstar', '👨‍💻');
+      });
 
-    function updateStats() {
-      document.getElementById('stat-servers').innerText = servers + '+';
-      document.getElementById('stat-exploits').innerText = exploits;
-      // random increment to feel alive
-      servers += Math.floor(Math.random() * 3);
-      exploits += Math.floor(Math.random() * 2);
-      if (exploits > 99) exploits = 49; // keep it reasonable
-    }
-    setInterval(updateStats, 4200);
-    updateStats(); // initial
+      // login name + password reminder
+      loginBtn.addEventListener('click', () => {
+        showToast('🔐 login: monstar / password: viki26', '🔑');
+      });
 
-    // cli typing effect (js interactive)
-    const cliSpan = document.getElementById('cli-text');
-    const messages = [
-      'scan --target sri-lanka',
-      'whoami → monster\@god-of-server',
-      'ls -la /etc/monster',
-      'cat /flag/server.root',
-      'nmap -p- +94.0.0.0/8',
-      'whatsapp report --urgent'
-    ];
-    let idx = 0;
-    setInterval(() => {
-      idx = (idx + 1) % messages.length;
-      cliSpan.textContent = messages[idx];
-    }, 3000);
+      // also any click on login pill shows friendly reminder (optional)
+      document.querySelector('.login-pill').addEventListener('click', () => {
+        showToast('✓ name: monstar · pass: viki26', '🔒');
+      });
 
-    // WhatsApp click actions (popup + report simulation)
-    const waCard = document.getElementById('wa-click');
-    const reportBtn = document.getElementById('reportActionBtn');
-    const whatsappNumber = '+94777777777'; // raw for link
+      // bonus: credentials reminder in footer (already visible) but we add hover effect
+      const footerCred = document.querySelector('.credentials-reminder');
+      if (footerCred) {
+        footerCred.addEventListener('mouseenter', () => {
+          showToast('monstar / viki26 (web dev)', '✨');
+        });
+      }
 
-    function waClickHandler() {
-      // open whatsapp link (web or app) with pre-filled message
-      const message = encodeURIComponent('MONSTER REPORT · Sri Lanka · urgent server compromise');
-      const waLink = `https://wa.me/${whatsappNumber}?text=${message}`;
-      window.open(waLink, '_blank');
-      // additional visual feedback
-      alert('[MONSTER] Redirecting to WhatsApp report number +94...');
-    }
+      // simulate "web developer" vibe — static but dynamic message
+      console.log('🐙 monstar bag website · developer: viki26');
+    })();
+  </script>
 
-    waCard.addEventListener('click', waClickHandler);
-    reportBtn.addEventListener('click', waClickHandler);
-
-    // add extra hover pulse on whatsapp card
-    const whatsappDiv = document.getElementById('whatsapp-card');
-    whatsappDiv.classList.add('glow');
-
-    // simulate monster name everywhere: god of server on console
-    console.log('🐲 MONSTER · GOD OF SERVER · +94 sri lanka ready');
-
-    // additional dynamic: update footer / etc.
-    const sriElement = document.querySelector('.sri-lanka-footer p');
-    if (sriElement) {
-      setInterval(() => {
-        const date = new Date();
-        sriElement.innerHTML = `<i class="fas fa-clock"></i> monster time ${date.getHours()}:${date.getMinutes().toString().padStart(2,'0')} · +94 online`;
-      }, 1000);
-    }
-
-    // little easter egg : monster alert every 30 sec (but avoid spam)
-    let eggTimer = setTimeout(function egg() {
-      console.log('%c⚠️ MONSTER ALERT: GOD OF SERVER WATCHING +94 ⚠️', 'background: black; color: #0f0; font-size: 16px');
-      eggTimer = setTimeout(egg, 30000);
-    }, 30000);
-  })();
-</script>
-
-<!-- fallback for missing images (all icons are fontawesome, no external images needed) -->
+  <!-- ensure font/inter (optional fallback) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet">
+  <!-- font awesome integrity is not needed, we use free version -->
 </body>
 </html>
