@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monstar · dev security</title>
+  <!-- Font Awesome for crisp icons (optional but fits theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ===== RESET & GLOBAL ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Fira Code', 'Courier New', monospace;
+    }
+
+    body {
+      background: #0b0f1c;
+      color: #b0ffd0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 1rem;
+    }
+
+    /* CRT flicker simulation (subtle) */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(0, 255, 0, 0.03) 50%, rgba(0, 0, 0, 0.1) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.15;
+    }
+
+    .matrix-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-linear-gradient(0deg, rgba(0, 20, 0, 0.3) 0px, rgba(0, 50, 0, 0.2) 2px, transparent 3px, transparent 6px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      background: rgba(10, 18, 28, 0.85);
+      backdrop-filter: blur(2px);
+      border: 2px solid #1f9a5a;
+      box-shadow: 0 0 30px #1f9a5a55, inset 0 0 10px #1f9a5a22;
+      border-radius: 28px;
+      padding: 2rem 1.8rem;
+    }
+
+    /* ===== TERMINAL HEADER ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #2ce57a;
+      padding-bottom: 0.8rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 2.6rem;
+      color: #2ce57a;
+      filter: drop-shadow(0 0 8px #2ce57a);
+    }
+
+    .glitch {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #c0ffda;
+      text-shadow: -3px 0 #ff0080, 3px 0 #00ff99;
+      animation: glitch 1.2s infinite steps(1);
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: -3px 0 #ff0080, 3px 0 #00ff99; }
+      25% { text-shadow: 3px 0 #ff0080, -3px 0 #00ff99; }
+      50% { text-shadow: 2px -2px #ff0080, -2px 2px #00ff99; }
+      75% { text-shadow: -2px -2px #ff0080, 2px 2px #00ff99; }
+      100% { text-shadow: -3px 0 #ff0080, 3px 0 #00ff99; }
+    }
+
+    .status {
+      background: #0d2016;
+      padding: 0.8rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #2ce57a;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .led {
+      width: 12px;
+      height: 12px;
+      background: #2ce57a;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #00ff88;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ===== LOGIN CARD (main gate) ===== */
+    .login-panel {
+      background: #0c141f;
+      border: 2px solid #1a9f5c;
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 0 20px #1f9a5a;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      transition: 0.2s;
+    }
+
+    .login-panel:hover {
+      border-color: #2eff9e;
+      box-shadow: 0 0 40px #23cf7e;
+    }
+
+    .creds {
+      flex: 1.2;
+      min-width: 260px;
+    }
+
+    .creds h2 {
+      color: #b0ffc8;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      border-left: 5px solid #2ce57a;
+      padding-left: 1rem;
+    }
+
+    .input-group {
+      margin: 1.8rem 0;
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      color: #86f0b0;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+
+    .input-group input {
+      width: 100%;
+      background: #010a0f;
+      border: 2px solid #1f9a5a;
+      padding: 1rem 1.8rem;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      color: #2ce57a;
+      outline: none;
+      transition: 0.15s;
+    }
+
+    .input-group input:focus {
+      border-color: #ffb86b;
+      box-shadow: 0 0 18px #2ce57a;
+    }
+
+    .input-group i {
+      position: absolute;
+      right: 20px;
+      top: 42px;
+      color: #2ce57a;
+      font-size: 1.3rem;
+    }
+
+    .prefill-btn {
+      background: transparent;
+      border: 2px dashed #1f9a5a;
+      color: #acfcd2;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-weight: bold;
+      margin-top: 0.4rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .prefill-btn:hover {
+      background: #1f9a5a30;
+      border: 2px solid #b1ffcb;
+    }
+
+    .access-button {
+      background: #1a3a2a;
+      border: 2px solid #2ce57a;
+      color: #c0ffda;
+      padding: 1.2rem 2.2rem;
+      font-size: 1.8rem;
+      border-radius: 60px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.15s;
+      margin-top: 1.8rem;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px #1f9a5a;
+    }
+
+    .access-button:hover {
+      background: #174d2b;
+      box-shadow: 0 0 35px #2effa0;
+      border-color: #a0ffc0;
+    }
+
+    .access-message {
+      margin-top: 0.9rem;
+      font-size: 1.1rem;
+      min-height: 2.5rem;
+      color: #ffb86b;
+    }
+
+    .access-message i {
+      margin-right: 6px;
+    }
+
+    .preview-box {
+      flex: 1;
+      min-width: 200px;
+      background: #05100e;
+      border-radius: 30px;
+      padding: 1.4rem;
+      border: 1px solid #23a159;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .preview-box .quote {
+      font-size: 1.4rem;
+      font-style: italic;
+      color: #a6f7c5;
+      border-left: 4px solid #2ce57a;
+      padding-left: 1rem;
+      margin: 1rem 0;
+    }
+
+    .preview-box .highlight {
+      color: #ffcc88;
+      background: #1f3a2a;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      display: inline-block;
+    }
+
+    /* ===== SKILL GRID (WEB DEV HACKER) ===== */
+    .skills-section {
+      margin-top: 2.5rem;
+    }
+
+    .skills-section h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #1f9a5a;
+      padding-bottom: 0.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .skill-card {
+      background: #121f1b;
+      border: 2px solid #175532;
+      border-radius: 30px;
+      padding: 1.4rem 0.5rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #c3ffd6;
+      transition: 0.15s;
+      backdrop-filter: blur(1px);
+    }
+
+    .skill-card i {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 10px;
+      color: #2ce57a;
+    }
+
+    .skill-card:hover {
+      border-color: #2ce57a;
+      transform: scale(1.02);
+      box-shadow: 0 0 20px #35e084;
+    }
+
+    /* ===== FOOTER / ASCII ===== */
+    .footer {
+      margin-top: 3rem;
+      border-top: 2px solid #1f9a5a;
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #7acd9c;
+      flex-wrap: wrap;
+    }
+
+    .ascii {
+      font-size: 0.8rem;
+      line-height: 1.2;
+      color: #2ce57a66;
+    }
+
+    .exploit-note {
+      background: #1a2f20;
+      padding: 0.7rem 1.5rem;
+      border-radius: 30px;
+      border: 1px solid #23a159;
+    }
+  </style>
+</head>
+<body>
+<div class="matrix-bg"></div>
+
+<div class="container" id="mainContainer">
+  <!-- HEADER: MONSTAR identity -->
+  <div class="header">
+    <div class="logo-area">
+      <i class="fas fa-skull logo-icon"></i>
+      <span class="glitch">MONSTAR</span>
+    </div>
+    <div class="status">
+      <span class="led"></span>
+      <span class="status-text">root@monstar:~# whoami</span>
+      <span style="color:#facc7c;">webdev/exploit</span>
+    </div>
+  </div>
+
+  <!-- MAIN LOGIN PANEL with credentials (name: monstar, pass: monster12) -->
+  <div class="login-panel">
+    <div class="creds">
+      <h2>⫸ authorized access ⫷</h2>
+      <div class="input-group">
+        <label><i class="fas fa-user-secret" style="margin-right: 6px;"></i> login name</label>
+        <input type="text" id="loginName" value="monstar" placeholder="monstar">
+        <i class="fas fa-terminal"></i>
+      </div>
+      <div class="input-group">
+        <label><i class="fas fa-key"></i> password</label>
+        <input type="password" id="loginPass" value="monster12" placeholder="••••••••">
+        <i class="fas fa-shield-hal"></i>
+      </div>
+
+      <!-- quick fill button (just in case you want reset) -->
+      <button class="prefill-btn" id="prefillCreds"><i class="fas fa-sync-alt"></i> reset credentials</button>
+
+      <!-- ACCESS BUTTON -->
+      <button class="access-button" id="accessBtn"><i class="fas fa-bolt"></i> ACCESS GRANT</button>
+
+      <div class="access-message" id="accessMsg">
+        <i class="fas fa-info-circle"></i> waiting for secure handshake...
+      </div>
+    </div>
+
+    <!-- preview / mantra -->
+    <div class="preview-box">
+      <div class="quote">“Hack the web, build the core”</div>
+      <div><span class="highlight">✦ MONSTAR · full‑stack dev ✦</span></div>
+      <div style="margin-top: 20px; font-size: 1rem; color:#9ed9af;">
+        <i class="fas fa-bug"></i> name: monstar<br>
+        <i class="fas fa-lock"></i> pass: monster12
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS section: web developer / hacking tools -->
+  <div class="skills-section">
+    <h3><i class="fas fa-code"></i> [monstar::payloads]</h3>
+    <div class="grid">
+      <div class="skill-card"><i class="fab fa-html5"></i> HTML/FQL</div>
+      <div class="skill-card"><i class="fab fa-css3-alt"></i> CSS/ANIM</div>
+      <div class="skill-card"><i class="fab fa-js"></i> JS/EXPLOIT</div>
+      <div class="skill-card"><i class="fas fa-database"></i> SQLmap</div>
+      <div class="skill-card"><i class="fas fa-network-wired"></i> XSS/CSRF</div>
+      <div class="skill-card"><i class="fas fa-binary"></i> reverse</div>
+      <div class="skill-card"><i class="fas fa-server"></i> node/sh</div>
+    </div>
+    <!-- small message: promotes "monstar" as web developer with hacking mindset -->
+    <p style="background: #0f231b; padding: 1rem; border-radius: 30px; border-left: 8px solid #2ce57a;">
+      <i class="fas fa-skull-crossbones" style="margin-right: 8px;"></i> 
+      <strong>monsatar</strong> (aka monstar) — web developer by day, security researcher by night. 
+      HTML/CSS/JS artisan, bug bounty hunter.
+    </p>
+  </div>
+
+  <!-- FOOTER with ascii signature -->
+  <div class="footer">
+    <div class="ascii">
+      ╔══╗ ╔══╗ ╔╗   <br>
+      ║══╣ ║══╣ ║║   <br>
+      ╚══╝ ╚══╝ ╚╝   v1.0
+    </div>
+    <div class="exploit-note">
+      <i class="fas fa-terminal"></i> >_ monstar:~$ whoami && pwd
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // fixed credentials as requested: name = "monstar", password = "monster12"
+    const VALID_USER = "monstar";
+    const VALID_PASS = "monster12";
+
+    // DOM elements
+    const loginNameInput = document.getElementById('loginName');
+    const loginPassInput = document.getElementById('loginPass');
+    const accessBtn = document.getElementById('accessBtn');
+    const accessMsg = document.getElementById('accessMsg');
+    const prefillBtn = document.getElementById('prefillCreds');
+
+    // helper to set message (with icon)
+    function setMessage(text, isSuccess = false) {
+      accessMsg.innerHTML = isSuccess ? 
+        `<i class="fas fa-check-circle" style="color:#2ce57a;"></i> ${text}` : 
+        `<i class="fas fa-exclamation-triangle" style="color:#ffb86b;"></i> ${text}`;
+    }
+
+    // check credentials and show appropriate message
+    function checkAndDisplay() {
+      const enteredUser = loginNameInput.value.trim();
+      const enteredPass = loginPassInput.value;  // don't trim password (exact)
+
+      if (enteredUser === VALID_USER && enteredPass === VALID_PASS) {
+        setMessage(`Access GRANTED · welcome back, monstar · web root unlocked`, true);
+        // optional: make it extra flashy
+        accessMsg.style.color = "#b0ffc8";
+      } else {
+        setMessage(`access DENIED · who are you? valid credentials: monstar / monster12`);
+        accessMsg.style.color = "#ffb86b";
+      }
+    }
+
+    // event listener for access button
+    accessBtn.addEventListener('click', function(e) {
+      e.preventDefault();  // avoid any form-like behavior
+      checkAndDisplay();
+    });
+
+    // prefill / reset credentials to the correct ones (monstar / monster12)
+    function resetToValid() {
+      loginNameInput.value = VALID_USER;
+      loginPassInput.value = VALID_PASS;
+      setMessage(`credentials restored to monstar / monster12 · try now`, false);
+    }
+
+    prefillBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      resetToValid();
+    });
+
+    // also trigger check if user presses enter in any field (optional)
+    [loginNameInput, loginPassInput].forEach(input => {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkAndDisplay();
+        }
+      });
+    });
+
+    // initial message on page load (empty or show hint)
+    setMessage(`enter name/pass and click "ACCESS GRANT"`);
+
+    // but we pre-filled with correct values? yes inputs already set to monstar/monster12
+    // optionally set a welcome because we prefilled — but let user decide to click.
+    // (no automatic grant on load, they need to click the button, but fields are correct)
+
+    // ===== extra: simulate terminal style log (nothing else)
+    console.log("Monstar · devsec · ready");
+
+    // bonus: make the login panel "blink" if credentials are correct (just fun)
+    // but we don't auto grant, they must press button.
+
+    // additional small detail — i'll add a "quick auto-fill and grant" double? not needed.
+    // But if you want instant demo, we can click programmatically? no, that would be annoying.
+    // But let's add a tiny shortcut: double-click the container to fill and grant (easter egg)
+    const container = document.getElementById('mainContainer');
+    container.addEventListener('dblclick', function(ev) {
+      // only if target is not input (avoid weirdness)
+      if (!ev.target.matches('input, button')) {
+        loginNameInput.value = VALID_USER;
+        loginPassInput.value = VALID_PASS;
+        checkAndDisplay();  // shows granted
+      }
+    });
+  })();
+</script>
+<!-- additional comment to emphasize: all creds monstar / monster12, promote web dev & hacking -->
+<!-- website name "monsatar" is reflected in the footer ascii and header glitch as monstar (similar) -->
+</body>
+</html>
